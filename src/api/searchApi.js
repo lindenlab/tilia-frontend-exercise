@@ -1,7 +1,5 @@
 import { countries } from "./data";
 
-// TODO: implement country search!
-//
 // This function should implement a search simple function that accepts input and returns matching results.
 //
 // Requirements:
@@ -37,6 +35,24 @@ import { countries } from "./data";
 //
 // - see the searchApi.test.js file for unit tests
 //
-export const search = (searchInput) => {
-  throw new Error("Not Implemented!"); // replace with implementation
+export const search = (searchInput = "") => {
+	const isRegex =
+		searchInput[0] === "/" && searchInput[searchInput.length - 1] === "/";
+	const regex = new RegExp(searchInput.slice(1, -1), "i");
+
+	if (searchInput) {
+		return countries.filter(({ name, code }) => {
+			if (isRegex) {
+				return (
+					regex.test(name?.toLowerCase()) ||
+					regex.test(code?.toLowerCase())
+				);
+			}
+			return (
+				name?.toLowerCase().startsWith(searchInput.toLowerCase()) ||
+				code?.toLowerCase().startsWith(searchInput.toLowerCase())
+			);
+		});
+	}
+	return [];
 };

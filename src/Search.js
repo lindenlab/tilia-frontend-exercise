@@ -1,57 +1,43 @@
-//import { search } from "./api/searchApi";
+import { useEffect, useState } from "react";
+import { DebounceInput } from "react-debounce-input";
+import { search } from "./api/searchApi";
+import { DEBOUNCE_TIME } from "./constants";
+import { ResultList } from "./Result";
 
-//
-// TODO: implement search
-//
-// Use the search function exported from the searchApi to take input
-// and display search results.
-//
-// TODO:  implement orientation
-//
-// change the layout of the search component based on the orientation prop
-//
-// - if HORIZONTAL: the label, input and results should flow left to right...
-//      label input results
-//
-// - if VERTICAL: the label, input and results should flow top to bottom...
-//      label
-//      input
-//      results
-//
+const _T = (str) => str;
 export const Search = ({ orientation = ORIENTATION.VERTICAL }) => {
-  return (
-    <div className="search">
-      <label id="searchLabel">Country Search</label>
-      <input aria-labelledby="searchLabel" name="searchInput" type="text" />
-      <ResultList resultData={[]} />
-    </div>
-  );
+	// @Variables
+	const [searchText, setSearchText] = useState("");
+	const [list, setList] = useState([]);
+	const isVertical = orientation === ORIENTATION.VERTICAL;
+	// @ Events
+	const handleSearchTextChange = (e) => setSearchText(e.target.value);
+	// @Effects
+	useEffect(() => {
+		setList(search(searchText));
+	}, [searchText]);
+
+	return (
+		<div
+			className={`container ${
+				isVertical ? "vertical-container" : "horizontal-container"
+			}`}
+		>
+			<label htmlFor="search-input">{_T("Search")}</label>
+			<DebounceInput
+				id="search-input"
+				className="search-input"
+				data-testid="search-input"
+				minLength={1}
+				debounceTimeout={DEBOUNCE_TIME}
+				onChange={handleSearchTextChange}
+			/>
+			<ResultList list={list} />
+		</div>
+	);
 };
+
 export const ORIENTATION = {
-  VERTICAL: "VERT",
-  HORIZONTAL: "HORZ",
-};
-
-// TODO: use CSS to change the layout of the result
-//
-// - the name should display aligned to the far left
-// - the code should display aligned to the far right
-//  -----------------------------------------------
-//  | Short Name                               SN |
-//  | Looooooooooooooonger Name                LN |
-//  -----------------------------------------------
-//
-const Result = ({ data }) => {
-  return (
-    <div className="result">
-      <span className="resultName">{data.name}</span>
-      <span className="resultCode">{data.code}</span>
-    </div>
-  );
-};
-
-// TODO: implement the ResultList using the Result component above
-//
-const ResultList = ({ resultData = [] }) => {
-  return <div className="results">{/* render the result data here */}</div>;
+	VERTICAL: "VERT",
+	HORIZONTAL: "HORZ",
 };
