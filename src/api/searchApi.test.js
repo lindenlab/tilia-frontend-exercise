@@ -21,7 +21,7 @@ describe("search", () => {
   });
   
   it("should match name with Regex", () => {
-    expect(search(/Gambia/)).toEqual([{ name: "Gambia", code: "GM" }]);
+    expect(true).toEqual(false); // TODO delete this line and replace with a test that matches the description
   });
   
   it("should match name with partial string", () => {
