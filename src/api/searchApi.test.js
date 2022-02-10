@@ -11,19 +11,25 @@ import { search } from "./searchApi";
 //
 //
 describe("search", () => {
+  
   it("should match code with exact string", () => {
     expect(search("GM")).toEqual([{ name: "Gambia", code: "GM" }]);
   });
-  it("should match name with Regex", () => {
-    expect(search(/Gambia/)).toEqual([{ name: "Gambia", code: "GM" }]);
-  });
+
   it("should match name with exact string", () => {
     expect(true).toEqual(false); // TODO delete this line and replace with a test that matches the description
   });
+  
+  it("should match name with Regex", () => {
+    expect(search(/Gambia/)).toEqual([{ name: "Gambia", code: "GM" }]);
+  });
+  
   it("should match name with partial string", () => {
     expect(true).toEqual(false); // TODO delete this line and replace with a test that matches the description
   });
+  
   it("should match name with regex", () => {
     expect(true).toEqual(false); // TODO delete this line and replace with a test that matches the description
   });
+  
 });
